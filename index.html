@@ -1069,6 +1069,39 @@ body{
 @media(min-width:900px){
   .add-fab{display:none}
 }
+.photo-upload-box{
+  position:relative;
+  border:2px dashed rgba(30,58,138,.28);
+  border-radius:12px;
+  padding:16px;
+  text-align:center;
+  background:rgba(255,255,255,.55);
+  cursor:pointer;
+  margin-bottom:10px;
+}
+
+.photo-upload-box input[type="file"]{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  cursor:pointer;
+}
+
+.photo-upload-text{
+  color:#1e3a8a;
+  font-size:15px;
+  font-weight:900;
+}
+
+.photo-preview{
+  width:76px;
+  height:76px;
+  object-fit:cover;
+  border-radius:12px;
+  margin:10px auto 0;
+  display:block;
+  border:2px solid #c0b8a8;
+}
 </style>
 </head>
 
@@ -1770,6 +1803,24 @@ function bgClose(e,id){
 document.addEventListener('DOMContentLoaded', () => {
   loadLocal();
 });
+function handlePhotoFile(event){
+  const file = event.target.files[0];
+  if(!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = function(e){
+    const dataUrl = e.target.result;
+
+    document.getElementById('f_photo_url').value = dataUrl;
+
+    const preview = document.getElementById('photoPreview');
+    preview.src = dataUrl;
+    preview.style.display = 'block';
+  };
+
+  reader.readAsDataURL(file);
+}
 </script>
 </body>
 </html>
