@@ -1247,7 +1247,28 @@ body{
         <div class="block-title">📝 メモ・写真</div>
         <div class="form-grid">
           <div class="field full"><label>メモ</label><textarea id="f_note" placeholder="出会いのエピソード、会話メモなど"></textarea></div>
-          <div class="field full"><label>写真URL</label><input id="f_photo_url" type="url" placeholder="https://..."></div>
+          <div class="field full">
+  <label>写真</label>
+
+  <div class="photo-upload-box">
+    <input
+      id="f_photo_file"
+      type="file"
+      accept="image/*"
+      onchange="handlePhotoFile(event)"
+    >
+    <div class="photo-upload-text">
+      写真を選択する
+    </div>
+    <img id="photoPreview" class="photo-preview" style="display:none;">
+  </div>
+
+  <input
+    id="f_photo_url"
+    type="url"
+    placeholder="または画像URLを入力"
+  >
+</div>
         </div>
       </div>
     </div>
