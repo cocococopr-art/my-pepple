@@ -2,13 +2,12 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>My People — 人脈ノート</title>
 
+<!-- PWA / iPhone Home Screen Icon -->
 <link rel="manifest" href="./manifest.json">
-
 <link rel="apple-touch-icon" href="./icon-180.png">
-
 <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
 <link rel="icon" type="image/png" sizes="512x512" href="./icon-512.png">
 
@@ -17,7 +16,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Yomogi&family=Zen+Kurenaido&display=swap" rel="stylesheet">
 <style>
@@ -753,6 +751,246 @@ html{
   .nb-card{padding-left:48px;padding-right:88px;}
   .sp-quick-grid{grid-template-columns:repeat(3,1fr);}
 }
+
+
+/* ══════════════════════════════════════════
+   SMARTPHONE UI REBUILD
+   - トップは検索主体
+   - 右下に人物追加ボタン
+   - 右側に付箋タブ
+   - スクロール時の崩れ防止
+══════════════════════════════════════════ */
+.mobile-page-tabs{display:none;}
+
+@media(max-width:899px){
+  html, body{
+    min-height:100%;
+    background:#fefcf5;
+    overflow-x:hidden;
+  }
+  body{
+    font-weight:600;
+    -webkit-text-size-adjust:100%;
+  }
+  .app{
+    display:block;
+    padding:0;
+    min-height:100dvh;
+    background:#fefcf5;
+  }
+  .notebook{
+    width:100%;
+    min-height:100dvh;
+    box-shadow:none;
+    border-radius:0;
+  }
+  .nb-spine-el,
+  .nb-rings-el{
+    display:none;
+  }
+  .nb-pages{
+    margin-left:0;
+    min-height:100dvh;
+    border-radius:0;
+    background-color:#fefcf5;
+    overflow:visible;
+    padding-bottom:108px;
+  }
+  .nb-pages-inner{
+    padding-bottom:108px;
+  }
+
+  /* トップページ：検索主体 */
+  .search-page{
+    min-height:100dvh;
+    padding:78px 22px 120px;
+    justify-content:flex-start;
+  }
+  .sp-logo-area{
+    margin-top:10px;
+    margin-bottom:28px;
+  }
+  .sp-logo{
+    font-size:44px;
+    font-weight:800;
+    letter-spacing:.5px;
+  }
+  .sp-logo-sub{
+    font-size:14px;
+    font-weight:800;
+  }
+  .sp-search-wrap{
+    max-width:560px;
+  }
+  .sp-search-wrap::before{
+    content:"⌕";
+    display:block;
+    text-align:center;
+    font-size:78px;
+    line-height:1;
+    color:#1e3a8a;
+    margin-bottom:18px;
+    font-weight:900;
+  }
+  .sp-search-bar{
+    border-radius:30px;
+    padding:15px 18px 15px 52px;
+    box-shadow:0 8px 22px rgba(30,58,138,.16);
+    border:1.5px solid rgba(30,58,138,.12);
+  }
+  .sp-input{
+    font-size:18px;
+    font-weight:800;
+  }
+  .sp-input::placeholder{
+    font-size:17px;
+    color:#8d96a8;
+    font-weight:700;
+  }
+  .sp-btn-row{
+    display:none;
+  }
+  .sp-quick{
+    margin-top:34px;
+  }
+  .sp-quick-title{
+    font-size:13px;
+    font-weight:800;
+  }
+  .sp-quick-card{
+    padding:15px 10px;
+  }
+  .sp-quick-name{
+    font-size:14px;
+    font-weight:800;
+  }
+
+  /* 右下：人物追加ボタン */
+  .add-fab{
+    display:flex !important;
+    position:fixed;
+    right:20px;
+    bottom:calc(22px + env(safe-area-inset-bottom,0px));
+    width:62px;
+    height:62px;
+    z-index:999;
+  }
+  .sync-fab,
+  .tab-bar{
+    display:none !important;
+  }
+  .settings-btn-inner{
+    display:none;
+  }
+
+  /* 右側：ノート付箋タブ */
+  .mobile-page-tabs{
+    position:fixed;
+    right:0;
+    top:148px;
+    z-index:950;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    pointer-events:auto;
+  }
+  .mobile-page-tab{
+    writing-mode:vertical-rl;
+    border:none;
+    padding:14px 8px;
+    border-radius:10px 0 0 10px;
+    background:#fff9c4;
+    color:#1e3a8a;
+    font-family:var(--font);
+    font-size:14px;
+    font-weight:900;
+    letter-spacing:1px;
+    box-shadow:-2px 3px 8px rgba(0,0,0,.16);
+  }
+  .mobile-page-tab:nth-child(2){background:#e1f5fe;}
+  .mobile-page-tab:nth-child(3){background:#fce4ec;}
+  .mobile-page-tab.active{
+    transform:translateX(-5px);
+    outline:2px solid rgba(30,58,138,.18);
+  }
+
+  /* 一覧をスマホで読みやすく */
+  .lp-header{
+    padding:22px 54px 0 20px;
+    min-height:76px;
+  }
+  .lp-toolbar{
+    padding:12px 54px 0 20px;
+  }
+  .section-div{
+    margin:14px 54px 14px 20px;
+  }
+  .cards-list{
+    padding:0 54px 0 16px;
+  }
+  .nb-card{
+    background:rgba(255,255,255,.72);
+    border:1px solid rgba(200,190,170,.45);
+    border-radius:12px;
+    margin-bottom:10px;
+    padding:13px 88px 13px 54px;
+    box-shadow:0 3px 10px rgba(0,0,0,.06);
+  }
+  .card-name{
+    font-size:18px;
+    font-weight:900;
+  }
+  .card-company,
+  .card-yomi,
+  .card-date,
+  .card-meets{
+    font-weight:700;
+  }
+
+  /* プロフィール・入力画面を読みやすく */
+  .modal{
+    max-height:88dvh;
+    border-radius:22px 22px 0 0;
+  }
+  .modal-title{
+    font-size:20px;
+    font-weight:900;
+  }
+  .modal-body{
+    padding:18px 20px 20px 24px;
+  }
+  .modal-header{
+    padding-left:68px;
+  }
+  .modal-footer{
+    padding-left:24px;
+    padding-right:20px;
+  }
+  .detail-name{
+    font-size:26px;
+    font-weight:900;
+  }
+  .i-item .i-lbl{
+    font-size:12px;
+    font-weight:900;
+  }
+  .i-item .i-val{
+    font-size:17px;
+    font-weight:800;
+    line-height:1.7;
+  }
+  .sticky-head,
+  .field label{
+    font-weight:900;
+  }
+  .field input,
+  .field select,
+  .field textarea{
+    font-weight:800;
+    font-size:17px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -822,6 +1060,12 @@ html{
     </svg>
 
     <div class="nb-pages">
+      <!-- スマホ用：右側の付箋タブ -->
+      <div class="mobile-page-tabs">
+        <button onclick="switchTab('search')" class="mobile-page-tab active" id="m-tab-search">検索</button>
+        <button onclick="switchTab('list')" class="mobile-page-tab" id="m-tab-list">一覧</button>
+        <button onclick="toggleSetup()" class="mobile-page-tab" id="m-tab-setting">設定</button>
+      </div>
       <div class="nb-pages-inner">
 
         <!-- 設定ボタン -->
@@ -852,7 +1096,7 @@ html{
             <div class="sp-search-wrap">
               <div class="sp-search-bar">
                 <span class="sp-search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
-                <input class="sp-input" id="spInput" type="text" placeholder="名前・会社・MBTI・趣味…" oninput="spSearch()" autocomplete="off"/>
+                <input class="sp-input" id="spInput" type="text" placeholder="どなたを知りたいですか？" oninput="spSearch()" autocomplete="off"/>
                 <button class="sp-clear" id="spClear" onclick="spClear()">✕</button>
               </div>
               <div class="sp-results" id="spResults"></div>
@@ -1073,11 +1317,15 @@ function switchTab(t){
     if(pc)pc.classList.toggle('active',id===t);
   });
   const isList=t==='list';
+  // smartphone sticky tabs
+  document.getElementById('m-tab-search')?.classList.toggle('active', t === 'search');
+  document.getElementById('m-tab-list')?.classList.toggle('active', t === 'list');
+  document.getElementById('m-tab-setting')?.classList.remove('active');
   // mobile FABs
   const fab=document.getElementById('addFab');
   const sfab=document.getElementById('syncFab');
-  if(fab)fab.style.display=(!isPC()&&isList)?'flex':'none';
-  if(sfab)sfab.style.display=(!isPC()&&isList)?'flex':'none';
+  if(fab)fab.style.display=(!isPC())?'flex':'none';
+  if(sfab)sfab.style.display='none';
   // pc sidebar add btn
   const pcAdd=document.getElementById('pc-add-btn');
   if(pcAdd)pcAdd.style.display=isList?'flex':'none';
